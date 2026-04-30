@@ -5,7 +5,7 @@ import time
 import ssl
 
 class SQLiteToRabbitMQ:
-    def __init__(self, db_path, queue_name, rabbitmq_host='localhost', 
+    def __init__(self, db_path, queue_name, rabbitmq_host='rabbitmq', 
                  rabbitmq_user='guest', rabbitmq_pass='guest'):
         self.db_path = db_path
         self.queue_name = queue_name
@@ -15,6 +15,7 @@ class SQLiteToRabbitMQ:
 
         self.ssl_context = ssl.create_default_context(
             cafile="/etc/rabbitmq/certs/server.crt"  # Используем серверный сертификат как CA
+            # cafile="certs/server.crt"
         )
         self.ssl_context.check_hostname = False  # Отключаем проверку имени хоста
         self.ssl_context.verify_mode = ssl.CERT_REQUIRED  # Но проверяем сертификат
@@ -23,6 +24,7 @@ class SQLiteToRabbitMQ:
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(
                 host=self.rabbitmq_host,
+                port=5671,
                 credentials=pika.PlainCredentials(
                     self.rabbitmq_user, 
                     self.rabbitmq_pass
