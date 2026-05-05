@@ -23,6 +23,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+socket_server = None
+server_thread = None
+
 app = FastAPI()
 
 @app.post('/send_data_to_normalize')
